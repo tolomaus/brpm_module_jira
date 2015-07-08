@@ -1,10 +1,10 @@
 dependencies:
- - brpm
+  - brpm_module_brpm
 
 integration_servers:
- - JIRA
+  - JIRA
 
-version: 0.1.0
+version: 0.1.1
 
 author: Niek Bartholomeus
 email: niek.bartholomeus@gmail.com
