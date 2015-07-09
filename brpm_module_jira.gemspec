@@ -2,18 +2,18 @@ require "yaml"
 
 config = YAML.load_file(File.join(File.dirname(__FILE__), "config.yml"))
 
-Gem::Specification.new do |s|
-  s.name          = File.basename(File.expand_path(File.dirname(__FILE__)))
-  s.version       = config["version"]
-  s.platform      = Gem::Platform::RUBY
-  s.license       = "GNU General Public License v2.0"
-  s.authors       = [config["author"]]
-  s.email         = config["email"]
-  s.homepage      = config["homepage"]
-  s.summary       = config["summary"]
-  s.description   = config["description"]
+Gem::Specification.new do |spec|
+  spec.name          = File.basename(File.expand_path(File.dirname(__FILE__)))
+  spec.version       = config["version"]
+  spec.platform      = Gem::Platform::RUBY
+  spec.license       = "GNU General Public License v2.0"
+  spec.authors       = [config["author"]]
+  spec.email         = config["email"]
+  spec.homepage      = config["homepage"]
+  spec.summary       = config["summary"]
+  spec.description   = config["description"]
 
-  s.add_runtime_dependency "brpm_content", ">=0.1.10"
+  spec.add_runtime_dependency "brpm_content", ">=0.1.10"
 
   if config["dependencies"]
     config["dependencies"].each do |dependency|
@@ -24,13 +24,16 @@ Gem::Specification.new do |s|
         modul = dependency
         options = {}
       end
-      s.add_runtime_dependency modul, options["version"] unless ["brpm", "bladelogic", "jira"].include?(modul)
+      spec.add_runtime_dependency modul, options["version"] unless ["brpm", "bladelogic", "jira"].include?(modul)
     end
   end
 
-  s.add_development_dependency "rake"
-  s.add_development_dependency "rspec"
+  spec.add_development_dependency "rake"
+  spec.add_development_dependency "rspec"
 
-  s.files         = `git ls-files`.split("\n")
-  s.require_path  = 'lib'
+  spec.files         = `git ls-files`.split("\n")
+  spec.require_path  = 'lib'
+
+  spec.executables   = spec.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
+  spec.bindir        = "bin"
 end
