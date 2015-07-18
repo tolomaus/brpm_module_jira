@@ -4,17 +4,4 @@
 #   required: no
 ###
 
-#=== BMC Application Automation Integration Server: JIRA ===#
-# [integration_id=4]
-#=== End ===#
-
-require "#{ENV["BRPM_CONTENT_HOME"] || "#{ENV["BRPM_HOME"]}/modules"}/gems/brpm_content-#{ENV["BRPM_CONTENT_VERSION"] || "latest"}/modules/framework/brpm_script_executor.rb"
-
-params["direct_execute"] = "true"
-
-params["SS_integration_dns"] = SS_integration_dns
-params["SS_integration_username"] = SS_integration_username
-params["SS_integration_password_enc"] = SS_integration_password_enc
-params["SS_integration_details"] = YAML.load(SS_integration_details)
-
-BrpmScriptExecutor.execute_automation_script_from_gem("brpm_module_jira", "transition_issues_for_run", params)
+integration_server_type: Jira
