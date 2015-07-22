@@ -1,13 +1,13 @@
-###
-# jira_release_field_id:
-#   name: JIRA release field id
-#   required: yes
-# old_release_name:
-#   name: Old release name
-#   required: yes
-# new_release_name:
-#   name: New release name
-#   required: yes
-###
+params:
+  jira_release_field_id:
+    name: JIRA release field id
+    required: yes
+  old_release_name:
+    name: Old release name
+    required: yes
+  new_release_name:
+    name: New release name
+    required: yes
+
 
 integration_server_type: Jira

@@ -1,10 +1,10 @@
-###
-# issue_id:
-#   name: Issue Id
-#   required: yes
-# target_issue_status:
-#   name: Target issue status
-#   required: yes
-###
+params:
+  issue_id:
+    name: Issue Id
+    required: yes
+  target_issue_status:
+    name: Target issue status
+    required: yes
+
 
 integration_server_type: Jira

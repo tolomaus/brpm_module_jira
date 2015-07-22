@@ -1,10 +1,10 @@
-###
-# issue_id:
-#   name: Issue Id
-#   required: yes
-# comment:
-#   name: Comment
-#   required: yes
-###
+params:
+  issue_id:
+    name: Issue Id
+    required: yes
+  comment:
+    name: Comment
+    required: yes
+
 
 integration_server_type: Jira
