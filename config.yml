@@ -1,10 +1,12 @@
 dependencies:
   - brpm_module_brpm
 
-version: 0.1.8
+version: 0.1.9
 
 author: Niek Bartholomeus
 email: niek.bartholomeus@gmail.com
 homepage: https://github.com/BMC-RLM/brpm_module_jira
+license: MIT
 summary: JIRA automation scripts and libraries to run on top of the BRPM Content framework
 description: JIRA automation scripts and libraries to run on top of the BRPM Content framework. See https://github.com/BMC-RLM/brpm_content for more information about the BRPM Content framework
+                                                                                                                      n
