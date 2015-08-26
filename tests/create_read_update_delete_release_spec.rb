@@ -16,20 +16,20 @@ describe 'create/update/delete release' do
       params = params.merge(get_integration_params_for_jira)
 
       params["release_name"] = 'JIRA tests - release 1'
-      BrpmScriptExecutor.execute_automation_script_from_gem("brpm_module_jira", "create_release", params)
+      BrpmScriptExecutor.execute_automation_script("brpm_module_jira", "create_release", params)
 
       option = @jira_rest_client.get_option_for_dropdown_custom_field(params["jira_release_field_id"], 'JIRA tests - release 1')
       expect(option).not_to be_nil
 
       params["old_release_name"] = 'JIRA tests - release 1'
       params["new_release_name"] = 'JIRA tests - release 1 - updated'
-      BrpmScriptExecutor.execute_automation_script_from_gem("brpm_module_jira", "update_release", params)
+      BrpmScriptExecutor.execute_automation_script("brpm_module_jira", "update_release", params)
 
       option = @jira_rest_client.get_option_for_dropdown_custom_field(params["jira_release_field_id"], 'JIRA tests - release 1 - updated')
       expect(option).not_to be_nil
 
       params["release_name"] = 'JIRA tests - release 1 - updated'
-      BrpmScriptExecutor.execute_automation_script_from_gem("brpm_module_jira", "delete_release", params)
+      BrpmScriptExecutor.execute_automation_script("brpm_module_jira", "delete_release", params)
 
       option = @jira_rest_client.get_option_for_dropdown_custom_field(params["jira_release_field_id"], 'JIRA tests - release 1 - updated')
       expect(option).to be_nil

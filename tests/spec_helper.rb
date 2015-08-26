@@ -7,7 +7,7 @@ def setup_brpm_auto
 
   BrpmAuto.setup( get_default_params.merge!(get_integration_params_for_jira) )
 
-  BrpmAuto.require_module_from_gem "brpm_module_jira"
+  BrpmAuto.require_module "brpm_module_jira"
 
   @jira_rest_client = JiraRestClient.new
 end

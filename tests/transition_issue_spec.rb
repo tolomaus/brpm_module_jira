@@ -16,16 +16,16 @@ describe 'transition issue' do
       params["issue_id"] = "EF-25"
 
       params["target_issue_status"] = "Done"
-      BrpmScriptExecutor.execute_automation_script_from_gem("brpm_module_jira", "transition_issue", params)
+      BrpmScriptExecutor.execute_automation_script("brpm_module_jira", "transition_issue", params)
 
       params["target_issue_status"] = "To Do"
-      BrpmScriptExecutor.execute_automation_script_from_gem("brpm_module_jira", "transition_issue", params)
+      BrpmScriptExecutor.execute_automation_script("brpm_module_jira", "transition_issue", params)
 
       params["target_issue_status"] = "In development"
-      BrpmScriptExecutor.execute_automation_script_from_gem("brpm_module_jira", "transition_issue", params)
+      BrpmScriptExecutor.execute_automation_script("brpm_module_jira", "transition_issue", params)
 
       params["target_issue_status"] = "Deployed to development"
-      BrpmScriptExecutor.execute_automation_script_from_gem("brpm_module_jira", "transition_issue", params)
+      BrpmScriptExecutor.execute_automation_script("brpm_module_jira", "transition_issue", params)
     end
   end
 end
