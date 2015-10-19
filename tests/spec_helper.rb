@@ -3,7 +3,6 @@ require "brpm_script_executor"
 
 def setup_brpm_auto
   FileUtils.mkdir_p "/tmp/brpm_content"
-  create_symlink_to_gemset
 
   BrpmAuto.setup( get_default_params.merge!(get_integration_params_for_jira) )
 
@@ -37,11 +36,4 @@ end
 
 def cleanup_release(release_name)
   @jira_rest_client.delete_option_for_dropdown_custom_field('10000', release_name)
-end
-
-def create_symlink_to_gemset
-  module_name = File.basename(File.expand_path("#{File.dirname(__FILE__)}/.."))
-  symlink = "#{ENV["GEM_HOME"]}/gems/#{module_name}-999.0.0"
-  FileUtils.rm(symlink) if File.exists?(symlink)
-  FileUtils.ln_s(File.expand_path("#{File.dirname(__FILE__)}/.."), symlink)
 end
