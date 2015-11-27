@@ -21,6 +21,6 @@ unless params["target_issue_status"]
 end
 
 tickets.each do |ticket|
-  BrpmAuto.log "Setting the status of issue #{ticket["foreign_id"]} to #{params["target_issue_status"]}"
+  BrpmAuto.log "Setting the status of issue #{ticket["foreign_id"]} to #{params["target_issue_status"]}... (non-existing issues or invalid target statuses will be ignored)"
   JiraRestClient.new.set_issue_to_status(ticket["foreign_id"], params["target_issue_status"])
 end

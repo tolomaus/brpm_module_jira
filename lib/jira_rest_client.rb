@@ -20,7 +20,13 @@ class JiraRestClient
   # POST /rest/api/2/issue/{issueIdOrKey}/comment
   def add_comment(issue_id, comment_body = 'Dummy Comment')
     cmmnt = {:body => comment_body}
-    Rest.post("#{@api_url}/issue/#{issue_id}/comment", cmmnt, { :username => @username, :password => @password })["response"]
+    result = Rest.post("#{@api_url}/issue/#{issue_id}/comment", cmmnt, { :username => @username, :password => @password })
+
+    unless result["status"] == "success"
+      raise "Could not add the comment: #{result["error_message"]}"
+    end
+
+    result["response"]
   end
 
   # GET /rest/api/2/issue/{issueIdOrKey}/transitions[?expand=transitions.fields]
@@ -29,7 +35,17 @@ class JiraRestClient
     if expand_transition
       url = "#{url}?expand=transitions.fields"
     end
-    Rest.get(url, { :username => @username, :password => @password })["response"]
+    result = Rest.get(url, { :username => @username, :password => @password })
+
+    if result["status"] == "success"
+      result["response"]["transitions"]
+    else
+      if result["code"] == 404
+        {}
+      else
+        raise "Error getting the issue transitions: #{result["error_message"]}"
+      end
+    end
   end
 
   # GET /rest/api/2/issue/{issueIdOrKey}/transitions?transitionId={transistion_id}[&expand=transitions.fields]
@@ -38,7 +54,13 @@ class JiraRestClient
     if expand_transition
         url = "#{url}&expand=transitions.fields"
     end
-    Rest.get(url, { :username => @username, :password => @password })["response"]
+    result = Rest.get(url, { :username => @username, :password => @password })
+
+    if result["status"] == "success"
+      result["response"]
+    else
+      raise "Error getting the issue transition: #{result["error_message"]}"
+    end
   end
 
   # POST /rest/api/2/issue/{issueIdOrKey}/transitions[?expand=transitions.fields]
@@ -49,26 +71,42 @@ class JiraRestClient
     end
     transition = {:update=>{:comment =>[{:add => {:body => "#{comment}"}}]}, :transition => {:id => "#{transition_id}"}}
     #Simple post as only return code is returned
-    Rest.post(url, transition, { :username => @username, :password => @password })["response"]
+    result = Rest.post(url, transition, { :username => @username, :password => @password })
+
+    unless result["status"] == "success"
+      raise "Could not add the comment: #{result["error_message"]}"
+    end
+
+    result["response"]
   end
 
   # GET /rest/api/2/project
   def get_projects()
-    Rest.get("#{@api_url}/project", { :username => @username, :password => @password })["response"]
+    result = Rest.get("#{@api_url}/project", { :username => @username, :password => @password })
+
+    if result["status"] == "success"
+      result["response"]
+    else
+      if result["code"] == 404
+        {}
+      else
+        raise "Error getting the projects: #{result["error_message"]}"
+      end
+    end
   end
 
   def set_issue_to_status(issue_id, status)
     BrpmAuto.log "Getting the possible transitions for issue #{issue_id}..."
-    result = get_issue_transitions(issue_id)
-    transitions = result["transitions"]
+    transitions = get_issue_transitions(issue_id)
 
     transition = transitions.find { |transition| transition["to"]["name"] == status }
 
     if transition
       BrpmAuto.log "Issuing transition #{transition["name"]} to update the status of the issue to #{status}..."
-      issues = post_issue_transition(issue_id, transition["id"])
+      post_issue_transition(issue_id, transition["id"])
     else
-      BrpmAuto.log "This ticket does not have a transition to status #{status} currently. Leaving it in its current state."
+      BrpmAuto.log "This issue does not have a transition to status #{status} currently. Leaving it in its current state."
+      nil
     end
   end
 
@@ -80,7 +118,17 @@ class JiraRestClient
     url = "#{url}&fields=#{fields}" unless fields == ''
     url = "#{url}&expand=#{expand}" unless expand == ''
 
-    Rest.get(url, { :username => @username, :password => @password })["response"]
+    Rest.get(url, { :username => @username, :password => @password })
+
+    if result["status"] == "success"
+      result["response"]
+    else
+      if result["code"] == 404
+        {}
+      else
+        raise "Error doing the search: #{result["error_message"]}"
+      end
+    end
   end
 
   # GET /rest/api/2/issue/{issueIdOrKey}[?fields=<field,field,...>&expand=<param,param,...>]
@@ -98,7 +146,13 @@ class JiraRestClient
         url = "#{url}?expand=#{expand}"
       end
     end
-    Rest.get(url, { :username => @username, :password => @password })["response"]
+    result = Rest.get(url, { :username => @username, :password => @password })
+
+    if result["status"] == "success"
+      result["response"]
+    else
+      raise "Error getting the issue: #{result["error_message"]}"
+    end
   end
 
   def get_option_for_dropdown_custom_field(custom_field_id, option_value)
@@ -109,7 +163,7 @@ class JiraRestClient
 
     if result["status"] == "success"
       custom_field_options = result["response"]
-      return custom_field_options.find { |custom_field_option| custom_field_option["optionvalue"] == option_value }
+      custom_field_options.find { |custom_field_option| custom_field_option["optionvalue"] == option_value }
     else
       if result["code"] == 404
         return nil
@@ -135,7 +189,7 @@ class JiraRestClient
     result = Rest.post(url, data, { :username => @username, :password => @password })
 
     if result["status"] == "success"
-      return result["response"]
+      result["response"]
     else
       raise "Could not create option: #{result["error_message"]}"
     end
