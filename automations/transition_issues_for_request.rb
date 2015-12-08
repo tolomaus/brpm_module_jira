@@ -6,7 +6,7 @@ tickets = brpm_rest_client.get_tickets_by_request_id(params.rest_request_id)
 
 if tickets.count == 0
   BrpmAuto.log "This request has no tickets, nothing further to do."
-  return
+  exit
 end
 
 if params["target_issue_status"].nil? or params["target_issue_status"].empty?
@@ -19,7 +19,7 @@ if params["target_issue_status"].nil? or params["target_issue_status"].empty?
     params["target_issue_status"] = "Deployed to #{stage_name}"
   else
     BrpmAuto.log "The request is not part of a plan so not processing the tickets."
-    return
+    exit
   end
 end
 
